@@ -1,0 +1,48 @@
+// import Footer from "../components/footer";
+// import EventCalendar from "../components/landing/eventCalendar";
+// import LandingEvents from "../components/landing/landingEvents";
+// import LoginPortal from "../components/landing/loginPortal";
+// import Navbar from "../components/navbar";
+import { useNavigate } from "react-router-dom";
+
+const LandingPage = () => {
+
+//   const handleBackClick = () => eventRef.current.scrollIntoView({ behavior: "smooth" });
+  let navigate = useNavigate();
+
+  return (
+    <div className="landing-page">
+      <div className="landing-header">
+          <div className="landing-header-sf">
+              ASMR
+          </div>
+          <div className="landing-btns">
+            <div className="landing-header-btn">
+                Team
+            </div>
+            <div className="landing-header-btn">
+                Tech Stack
+            </div>
+            <div className="landing-header-btn">
+                Continue to OCMS
+            </div>
+          </div>
+          
+      </div>
+      <div className="landing-main">
+        <div className="landing-title-text">
+            Online Medical Consultation System
+        </div>
+        <div className="landing-title-btn link" onClick={() => navigate("/app")}>
+            Continue to OCMS
+        </div>
+      </div>
+      <div className="landing-team">
+      </div>
+      <div className="landing-tech">
+      </div>
+    </div>
+  );
+}
+
+export default LandingPage;
