@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { BACKEND_URL } from '../constants';
-import axios from 'axios';
 import AdminPage from "../pages/adminPage";
 import DoctorPage from "../pages/doctorPage";
 import PatientPage from "../pages/patientPage";
@@ -19,12 +17,10 @@ const ProfilePage = () => {
 
       CustomAxios.get('me')
       .then((response) => {
-        console.log("response =", response)
+        console.log("found response =", response)
         setUserDetail(response.data.me)
       })
         .catch((err) => console.log(err))
-
-         refresh: JSON.parse(localStorage.getItem("refresh_token"))
   }, []);
 
   localStorage.setItem("userDetail", JSON.stringify(userDetail));
