@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BACKEND_URL } from "../constants";
+import { BACKEND_URL, FRONTEND_URL } from "../constants";
 
 const CustomAxios = axios.create({
     baseURL: `${BACKEND_URL}` + '/api/auth/',
@@ -53,8 +53,14 @@ CustomAxios.interceptors.response.use(
   );
 
 function refreshToken() {
+    // const navigate = useNavigate()
+    let refresh = JSON.parse(localStorage.getItem("refresh_token"))
+    if(!refresh) refresh = 'null'
     return CustomAxios.post("token/refresh/", {
         refresh: JSON.parse(localStorage.getItem("refresh_token")),
+    }).catch((err) => {
+        window.location.href = `${FRONTEND_URL}/ocms/login`;
+        console.log(err)
     });
   }
   
