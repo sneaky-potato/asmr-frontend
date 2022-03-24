@@ -57,8 +57,8 @@ const DoctorRegisterCard = () => {
   }
   return (
     <div className="Login">
-      <Form onSubmit={onLoginFormSubmit} className="login-form">
-        <Form.Group size="lg" controlId="email" className="login-email-box">
+      <Form onSubmit={onLoginFormSubmit} className="login-form mb-3">
+        <Form.Group controlId="formBasicEmail" className="login-email-box">
           <Form.Label>Email</Form.Label>
           <Form.Control
             autoFocus

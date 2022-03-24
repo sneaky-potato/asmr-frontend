@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { BACKEND_URL } from "../constants";
@@ -17,11 +17,30 @@ export default function LoginCard() {
 
   let navigate = useNavigate()
 
+  useEffect(() => {
+
+    // if (localStorage.getItem("refresh_token") !== null) setHospitalList(JSON.parse(localStorage.getItem("hospitalList")));
+    if(localStorage.getItem("refresh_token")) 
+    {
+      axios.post(`${BACKEND_URL}/api/auth/token/refresh/`, {
+        refresh: JSON.parse(localStorage.getItem("refresh_token"))
+      }).then((response) => {
+        console.log("already logged in")
+        navigate('/ocms/me');
+
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
+}, []);
+
+
   async function h(event) {
     event.preventDefault();
 
-    if(!localStorage.getItem('refresh_token'))
+    if(localStorage.getItem('refresh_token') === null)
     {
+      console.log("refresh token not found")
       axios.post(`${BACKEND_URL}/api/auth/token/obtain/`, {
         email: email,
         password: password
@@ -45,6 +64,7 @@ export default function LoginCard() {
     }
     else
     {
+      console.log("logging in the user")
       CustomAxios.post('login', {
         email: email,
         password: password
