@@ -1,8 +1,9 @@
-import React, { useState, useContext} from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { BACKEND_URL } from "../constants";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginCard() {
 
@@ -13,6 +14,8 @@ export default function LoginCard() {
     return email.length > 0 && password.length > 0;
   }
 
+  let navigate = useNavigate()
+  
   async function handleSubmit(event) {
     event.preventDefault();
       axios.post(`${BACKEND_URL}/api/auth/login`, {
@@ -21,30 +24,36 @@ export default function LoginCard() {
       }).then((response) => {
           console.log(response);
 
-          localStorage.setItem("access_token", response.data.access);
-          localStorage.setItem("refresh_token", response.data.refresh);
+          localStorage.setItem("access_token", JSON.stringify(response.data.access));
+          localStorage.setItem("refresh_token", JSON.stringify(response.data.refresh));
 
-          axios.post(`${BACKEND_URL}/api/auth/ping`, {}, {
+          axios.get(`${BACKEND_URL}/api/auth/ping`, {
             headers: {
               'content-type': 'application/json',
-              'Authorization': 'Bearer ' + JSON.stringify(localStorage.getItem("access_token"))
+              'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("access_token"))
             }
           }).then((response) => {
-            console.log(response);
+            console.log("redirct from ping");
+            navigate('/ocms/me')
         })
         .catch((err) => {
           console.log(err);
           if (err.response.status == 401) {
-            axios.post(`${BACKEND_URL}/api/auth/token/refresh/`, {refresh: localStorage.getItem("refresh_token")})
+            axios.post(`${BACKEND_URL}/api/auth/token/refresh/`, {
+              refresh: JSON.parse(localStorage.getItem("refresh_token"))
+            })
             .then((response) => {
+              console.log("redirected from refresh")
               console.log(response);
-              localStorage.setItem("access_token", response.data.access);
+              localStorage.setItem("access_token", JSON.stringify(response.data.access));
+
+              navigate('/ocms/me')
             })
             .catch((err) => {
               console.log(err);
+              // Handle refresh token expiration
               
 
-              // Handle refresh token expiration
               
             })
           }
