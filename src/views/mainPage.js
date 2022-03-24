@@ -19,8 +19,11 @@ const MainPage = () => {
             <div className="main-title-btn link" onClick={() => navigate("/ocms")}>
                 Webapp Flow
             </div>
-            <div className="main-title-btn link" onClick={() => navigate("/ocms/register")}>
-                Register
+            <div className="main-title-btn link" onClick={() => navigate("/ocms/register/doctor")}>
+                Doctor Register
+            </div>
+            <div className="main-title-btn link" onClick={() => navigate("/ocms/register/patient")}>
+                Patient Register
             </div>
             <div className="main-title-btn link" onClick={() => navigate("/ocms/login")}>
                 Login
