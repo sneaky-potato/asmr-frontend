@@ -19,16 +19,44 @@ export default function LoginCard() {
 
   async function h(event) {
     event.preventDefault();
-    CustomAxios.post('login', {
-      email: email,
-      password: password
-    }).then((response) => {
-      console.log(response);
-      navigate('/ocms/me')
-    })
-    .catch((err) => {
-      console.log(err)
-    })
+
+    if(!localStorage.getItem('refresh_token'))
+    {
+      axios.post(`${BACKEND_URL}/api/auth/token/obtain/`, {
+        email: email,
+        password: password
+      }).then((response) => {
+        console.log("generated refresh token");
+        localStorage.setItem("refresh_token", JSON.stringify(response.data.refresh));
+        CustomAxios.post('login', {
+          email: email,
+          password: password
+        }).then((response) => {
+          console.log("ogged in =", response);
+          navigate('/ocms/me')
+        })
+        .catch((err) => {
+          console.log(err)
+        }) 
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    }
+    else
+    {
+      CustomAxios.post('login', {
+        email: email,
+        password: password
+      }).then((response) => {
+        console.log("ogged in =", response);
+        navigate('/ocms/me')
+      })
+      .catch((err) => {
+        console.log(err)
+      })  
+    }
+    
   }
 
   async function handleSubmit(event) {
