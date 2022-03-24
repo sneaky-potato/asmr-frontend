@@ -1,8 +1,3 @@
-// import Footer from "../components/footer";
-// import EventCalendar from "../components/landing/eventCalendar";
-// import LandingEvents from "../components/landing/landingEvents";
-// import LoginPortal from "../components/landing/loginPortal";
-// import Navbar from "../components/navbar";
 import { useNavigate } from "react-router-dom";
 
 const LandingPage = () => {
@@ -33,7 +28,7 @@ const LandingPage = () => {
         <div className="landing-title-text">
             Online Medical Consultation System
         </div>
-        <div className="landing-title-btn link" onClick={() => navigate("/app")}>
+        <div className="landing-title-btn link" onClick={() => navigate("/ocms")}>
             Continue to OCMS
         </div>
       </div>
