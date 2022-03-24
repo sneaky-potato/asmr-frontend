@@ -13,6 +13,6 @@ var BACKEND_URL, FRONTEND_URL;
 // }
 
 BACKEND_URL = "http://localhost:8000";
-FRONTEND_URL = "http://localhost:3000"
+FRONTEND_URL = "http://localhost:3000";
 
 export { BACKEND_URL, FRONTEND_URL };

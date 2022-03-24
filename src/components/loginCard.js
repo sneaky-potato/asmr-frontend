@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import { BACKEND_URL } from "../constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import CustomAxios from "../utils/customAxios";
 
 export default function LoginCard() {
 
@@ -15,7 +16,21 @@ export default function LoginCard() {
   }
 
   let navigate = useNavigate()
-  
+
+  async function h(event) {
+    event.preventDefault();
+    CustomAxios.post('login', {
+      email: email,
+      password: password
+    }).then((response) => {
+      console.log(response);
+      navigate('/ocms/me')
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
       axios.post(`${BACKEND_URL}/api/auth/login`, {
@@ -66,7 +81,7 @@ export default function LoginCard() {
 
   return (
     <div className="Login">
-      <Form onSubmit={handleSubmit} className="login-form">
+      <Form onSubmit={h} className="login-form">
         <Form.Group size="lg" controlId="email" className="login-email-box">
           <Form.Label>Email</Form.Label>
           <Form.Control
