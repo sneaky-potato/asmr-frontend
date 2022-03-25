@@ -5,14 +5,15 @@ import CustomAxios from '../utils/customAxios';
 import DoctorCard from "../components/doctorCard";
 
 const isPendingDoctor = (doctor) => {
-  return (doctor.role == 2 && doctor.pending == 1);
+  return (doctor.pending == 1);
 }
 const isNotPendingDoctor = (doctor) => {
-  return (doctor.role == 2 && doctor.pending == 0);
+  return (doctor.pending == 0);
 }
 const Profile = (props) => {
   return (
   <div className="profile">
+    <div className="profile-title title">{props.title}</div>
     <div className="admin-info">
       You are currently logged in as 
     </div>
@@ -24,7 +25,6 @@ const Profile = (props) => {
   </div>
   )
 }
-
 
 const ListOfDoctors = (props) => {
 
@@ -51,6 +51,7 @@ const ListOfDoctors = (props) => {
               pincode={doctor.pincode}
               contact={doctor.contact}
               email={doctor.email}
+              byAdmin={true}
               />
               )
             })
@@ -77,6 +78,7 @@ const ListOfDoctors = (props) => {
               pincode={doctor.pincode}
               contact={doctor.contact}
               email={doctor.email}
+              byAdmin={true}
               />
               )
             })
@@ -97,7 +99,6 @@ const ListOfHospitals = (props) => {
 const AdminPage = () => {
   const [userDetail, setUserDetail] = useState({});
   let navigate = useNavigate();
-  // const [userDetail, setUserDetail] = useState({});
 
   const navData = [
     {
@@ -132,20 +133,18 @@ const AdminPage = () => {
       title = "LIST OF HOSPITALS";
       BodyContent = ListOfHospitals;
   }
-
  
   useEffect(() => {
     setUserDetail(JSON.parse(localStorage.getItem("userDetail")))
-    CustomAxios.get('users')
+    CustomAxios.get('doctors')
         .then((response) => {
-            setUserList(response.data.users)
+            setUserList(response.data.doctors)
             setUserDetail(JSON.parse(localStorage.getItem("userDetail")))
           })
           .catch((err) => console.log(err));
-        }, []);
-  console.log(userList)
-
-return(
+    }, []);
+    console.log(userList)
+  return(
     <div className="admin-page">
       <Navigation 
         data={navData} 

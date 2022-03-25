@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import Navigation from "../components/navbar";
 import CustomAxios from "../utils/customAxios";
 import DoctorCard from "../components/doctorCard";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 
 const Profile = (props) => {
   return (
@@ -19,52 +22,26 @@ const Profile = (props) => {
   )
 }
 
-const BookAppointment = (props) => {
-
-  const [pincode, setPincode] = useState("");
-  const [doctorList, setDoctorList] = useState([])
-  const [availDoctorList, setAvailDoctorList] = useState([])
-
-  function checkPincode() {
-    return (/^\d+$/.test(pincode) && pincode.length == 6);
-  }
-  
-  function pincodeSearch(event)
-  {
-    event.preventDefault();
-    // console.log("helu");
-    const availableDoctors = doctorList.filter((doctor, index) => {
-      return doctor.pincode == pincode
-    })
-    setAvailDoctorList(availableDoctors)
-    console.log(availDoctorList)
-  }
-
-  useEffect(() => {
-    CustomAxios.get('users')
-    .then((response) => {
-      console.log(response)
-      setDoctorList(response.data.users)
-    })
-    .catch((err) => console.log(err))
-  }, []);
-
-  const messageSuccess = 'No Doctors found in this pin code'
-  const messageFailure = 'Doctors found in this pin code'
+const Errors = () => {
   return(
-    <div className="appointment-container">
-      <div className="appointment-pincode">
-        <label className="type-label">Input pin code: </label>
-          <input id="pincode" type="text" onChange={(e) => setPincode(e.target.value)} value={pincode} />
-          <button className="navbar-button button" disabled={!checkPincode} onClick={pincodeSearch}>Search</button>
-      </div>
-      <div className="appointment-content">
+    <div className="appointment">
+      Please input PIN CODE first
+    </div>
+  )
+}
+
+const BookAppointmentContent = (props) => {
+  const [startDate, setStartDate] = useState(new Date());
+  return(
+    <div className="appointment-content">
+      <div className="appointment-date"><label className="type-label">Select Date: </label><DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+        </div>
       { 
-        availDoctorList.map((doctor, index) => {
+        props.availDoctorList.map((doctor, index) => {
             return(
               <DoctorCard
+              key={index}
               id={doctor.id} 
-              password={doctor.password}
               name={doctor.first_name}
               lastname={doctor.last_name}
               hospital={doctor.hospital}
@@ -73,19 +50,98 @@ const BookAppointment = (props) => {
               pincode={doctor.pincode}
               contact={doctor.contact}
               email={doctor.email}
+              date={startDate}
+              byPatient={true}
               />
               )
             })
       }
       </div>
+  )
+}
+
+const BookAppointment = (props) => {
+
+  const [pincode, setPincode] = useState("");
+  const [doctorList, setDoctorList] = useState([])
+  const [availDoctorList, setAvailDoctorList] = useState([])
+  const [show, setShow] = useState(false);
+
+  function checkPincode() {
+    return (/^\d+$/.test(pincode) && pincode.length == 6);
+  }
+  
+  function pincodeSearch(event)
+  {
+    event.preventDefault();
+    const availableDoctors = doctorList.filter((doctor, index) => {
+      return doctor.pincode == pincode
+    })
+    setShow(true)
+    setAvailDoctorList(availableDoctors)
+    console.log(availDoctorList)
+  }
+
+  useEffect(() => {
+    CustomAxios.get('doctors')
+    .then((response) => {
+      console.log(response)
+      setDoctorList(response.data.doctors)
+      localStorage.setItem("doctors", JSON.stringify(response.data.doctors))
+    })
+    .catch((err) => console.log(err))
+  }, []);
+
+  let BodyContent;
+  console.log(show)
+  if(show) BodyContent = BookAppointmentContent
+  else BodyContent = Errors
+
+  return(
+    <div className="appointment-container">
+      <div className="appointment-pincode">
+        <label className="type-label">Input pin code: </label>
+          <input id="pincode" type="text" onChange={(e) => 
+            {
+              setPincode(e.target.value)
+              if(!(/^\d+$/.test(pincode) && pincode.length == 6)) {setShow(false)}
+          }} value={pincode} />
+          <button className="navbar-button button" disabled={!checkPincode} onClick={pincodeSearch}>Search</button>
+      </div>
+      <BodyContent availDoctorList={availDoctorList} />
     </div>
   )
 }
 
 const AppointmentHistory = (props) => {
+  const [appointmentList, setAppointmentList] = useState([]);
+  useEffect(() => {
+    CustomAxios.get('appointments', {})
+    .then((response) => {
+      console.log("appointment fetch =", response);
+      setAppointmentList(response.data.appointments)
+
+    })
+    .catch((err) => {
+      console.log(err)
+    }) 
+  }, []);
   return(
-    <div className="hospital-list">
-      hospital
+    <div className="appointment-list">
+      {
+        appointmentList.map((appointment, index) => {
+          return(
+            <div className="appointment" key={index}>
+              <div className="appointment-doctor">
+                Appointment with Dr. {JSON.parse(localStorage.getItem("doctors")).find((doctor) => {
+                  return doctor.id == appointment.doctor_id
+                }).first_name}
+                </div>
+              {appointment.description}
+            </div>
+          )
+        })
+      }
     </div>
   )
 }

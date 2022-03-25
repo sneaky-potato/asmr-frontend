@@ -1,6 +1,22 @@
 import CustomAxios from "../utils/customAxios";
 
 const DoctorCard = (props) => {
+    const user = JSON.parse(localStorage.getItem("userDetail"));
+    console.log(user)
+    async function handleAppointment(event) {
+      event.preventDefault();
+      CustomAxios.post('appointments', {
+        doctor_id: props.id, 
+        patient_id: user.id,
+        description: 'haha',
+      }).then((response) => {
+        console.log("appointment creted =", response);
+        window.location.reload(true)
+      })
+      .catch((err) => {
+        console.log(err)
+      }) 
+    }
 
     async function handleAccept(event) {
         event.preventDefault();
@@ -37,7 +53,10 @@ const DoctorCard = (props) => {
             <div className="doctor-pincode">{props.pincode}</div>
             <div className="doctor-contact">{props.contact}</div>
             <div className="doctor-email">{props.email}</div>
-            <button className="navbar-button button" onClick={handleAccept}>Accept</button>
+            {
+              props.byAdmin ? <button className="navbar-button button" onClick={handleAccept}>Accept</button>
+              : <button className="navbar-button button" onClick={handleAppointment}>Book appointment</button>
+            }
         </div>
     )
 }
