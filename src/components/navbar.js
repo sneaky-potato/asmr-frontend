@@ -2,12 +2,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logout from "../utils/logout";
 
-
 const Navbar = (props) => {
   const [isMobNavbarOpen, setIsMobNavbarOpen] = useState(false);
 
   let navigate = useNavigate();
-  console.log("props =", props.data )
 
   return (
     <div className="navbar" isopen={String(isMobNavbarOpen)}>
@@ -19,12 +17,12 @@ const Navbar = (props) => {
       </div>
       <div className="navbar-links">
           {
-            props.data.map((option) => {
+            props.data.map((option, index) => {
                 return(
-                <div className="link" onClick={() => navigate(`${option.link}`)}>{option.text}</div>)
+                <div className="link" key={index} isselected={String(props.currentSelection === index)} onClick={() => {props.changeSelection(index)}}>{option.text}</div>)
               })
           }
-        <button className="button" onClick={logout}>Log Out</button>
+        <button className="navbar-button button" onClick={logout}>Log Out</button>
       </div>
     </div>
   );
