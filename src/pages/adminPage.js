@@ -7,6 +7,92 @@ import DoctorCard from "../components/doctorCard";
 const isPendingDoctor = (doctor) => {
   return (doctor.role == 2 && doctor.pending == 1);
 }
+const isNotPendingDoctor = (doctor) => {
+  return (doctor.role == 2 && doctor.pending == 0);
+}
+const Profile = (props) => {
+  return (
+  <div className="profile">
+    <div className="admin-info">
+      You are currently logged in as 
+    </div>
+    <div className="admin-card">
+      <div className="admin-card-name">
+        {props.email}
+      </div>
+    </div>
+  </div>
+  )
+}
+
+
+const ListOfDoctors = (props) => {
+
+  const filtered = props.userList.filter(isPendingDoctor)
+  const remaining = props.userList.filter(isNotPendingDoctor)
+  return(
+    <div className="doctor-container">
+      <div className="doctor-label">
+        Pending Doctors
+      </div>
+
+      <div className="doctor-list">
+        {
+          filtered.map((doctor, index) => {
+            return(
+              <DoctorCard
+              id={doctor.id} 
+              password={doctor.password}
+              name={doctor.first_name}
+              lastname={doctor.last_name}
+              hospital={doctor.hospital}
+              speciality={doctor.speciality}
+              address={doctor.address}
+              pincode={doctor.pincode}
+              contact={doctor.contact}
+              email={doctor.email}
+              />
+              )
+            })
+          }
+      </div>
+
+
+      <div className="doctor-label">
+        Enrolled Doctors
+      </div>
+
+      <div className="doctor-list">
+        {
+          remaining.map((doctor, index) => {
+            return(
+              <DoctorCard 
+              id={doctor.id}
+              password={doctor.password}
+              name={doctor.first_name}
+              lastname={doctor.last_name}
+              hospital={doctor.hospital}
+              speciality={doctor.speciality}
+              address={doctor.address}
+              pincode={doctor.pincode}
+              contact={doctor.contact}
+              email={doctor.email}
+              />
+              )
+            })
+          }
+      </div>
+    </div>
+  )
+}
+
+const ListOfHospitals = (props) => {
+  return(
+    <div className="hospital-list">
+      hospital
+    </div>
+  )
+}
 
 const AdminPage = () => {
   const [userDetail, setUserDetail] = useState({});
@@ -15,68 +101,60 @@ const AdminPage = () => {
 
   const navData = [
     {
+      'text': 'Profile',
+      'icon': null
+    },
+    {
       'text': 'List of Doctors',
-      'link': '/'
+      'icon': null
     },
     {
       'text': 'List of Hospitals',
-      'link': '/'
+      'icon': null
     }
   ]
 
+  const [currentSelection, setCurrentSelection] = useState(0);
   const [userList, setUserList] = useState([]);
   const [filterList, setFilterList] = useState([]);
 
-  // localStorage.setItem("userDetail", JSON.stringify(userDetail));
+  var title, BodyContent;
+
+  if (currentSelection === 0) {
+      title = "PROFILE";
+      BodyContent = Profile;
+  }
+  else if (currentSelection === 1) {
+      title = "LIST OF DOCTORS";
+      BodyContent = ListOfDoctors;
+  }
+  else {
+      title = "LIST OF HOSPITALS";
+      BodyContent = ListOfHospitals;
+  }
+
  
   useEffect(() => {
-
-    // if (localStorage.getItem("doctorList") !== null) setDoctorList(JSON.parse(localStorage.getItem("doctorList")));
-    // let filtered = []
-    
+    setUserDetail(JSON.parse(localStorage.getItem("userDetail")))
     CustomAxios.get('users')
         .then((response) => {
-            // setHospitalList(response.data.hospitals/
             setUserList(response.data.users)
-            setFilterList(userList.filter(isPendingDoctor)) 
             setUserDetail(JSON.parse(localStorage.getItem("userDetail")))
           })
           .catch((err) => console.log(err));
-    }, []);
-        
-        
-  // filtered = userList.filter(isPendingDoctor);
+        }, []);
+  console.log(userList)
 
-// if(userDetail.role == 1) return (<)
 return(
     <div className="admin-page">
-      <Navigation data={navData} />
-      {/* <EditDoctors data={userList}/>  */}
-      {/* {
-        filterList.map((doctor) => {
-          return(
-            <DoctorCard 
-              key={doctor.id}
-              email={doctor.email}
-              name={doctor.first_name}
-              lastname={doctor.last_name}
-              hospital={doctor.hospital}
-              contact={doctor.contact}
-              address={doctor.address}
-              pincode={doctor.pincode}
-              editable={true}
-              />
-          )
-        })
-      } */}
-      <div className="admin-info">
-        You are currently logged in as 
-      </div>
-      <div className="admin-card">
-        <div className="admin-card-name">
-          {userDetail.email}
-        </div>
-    </div>
+      <Navigation 
+        data={navData} 
+        currentSelection={currentSelection}
+        changeSelection={setCurrentSelection} />
+      
+    <BodyContent 
+    email={userDetail.email}
+    userList={userList}/>
   </div>
   )
 }
