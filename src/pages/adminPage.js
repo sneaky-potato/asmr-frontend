@@ -52,6 +52,7 @@ const ListOfDoctors = (props) => {
               contact={doctor.contact}
               email={doctor.email}
               byAdmin={true}
+              toAccept={true}
               />
               )
             })

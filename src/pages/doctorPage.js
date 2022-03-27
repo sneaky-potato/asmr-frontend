@@ -1,41 +1,150 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Navigation from "../components/navbar";
+import CustomAxios from "../utils/customAxios";
+import AppointmentCard from "../components/appointmentCard";
+
+const Profile = (props) => {
+  return (
+  <div className="profile">
+    <div className="patient-card">
+      <div className="profile-title title">{props.title}</div>
+      <div className="patient-info">
+        You are currently logged in as 
+      </div>
+      <div className="patient-card-name">
+        Dr. {props.profile.first_name} {props.profile.last_name}
+      </div>
+    </div>
+  </div>
+  )
+}
+
+const PendingAppointments = (props) => {
+  const appointmentPassed = props.appointments.filter((appointment, index) => {
+    return appointment.status == 2
+  })
+  return(
+    <div className="appointment-list">
+      {
+      appointmentPassed.map((appointment, index) => {
+      return(
+        <AppointmentCard 
+          key={index}
+          id={appointment.id}
+          doctor={appointment.doctor_id}
+          patient={appointment.patient_id}
+          date={appointment.date}
+          description={appointment.description}
+          byPatient={false}
+          pendingByDoctor={true}
+        />
+      )
+    })
+  }
+    </div>
+  )
+}
+
+const AppointmentHistory = (props) => {
+  return(
+    <div className="appointment-list">
+      {
+        props.appointments.map((appointment, index) => {
+          return(
+            <AppointmentCard 
+            key={index}
+            id={appointment.id}
+            doctor={appointment.doctor_id}
+            patient={appointment.patient_id}
+            date={appointment.date}
+            status={appointment.status}
+            description={appointment.description}
+            />
+          )
+        })
+      }
+    </div>
+  )
+}
 
 const DoctorPage = () => {
 
-  let navigate = useNavigate();
+  const [appointmentList, setAppointmentList] = useState([]);
   const [userDetail, setUserDetail] = useState({});
+  const [patientList, setPatientList] = useState([]);
+
+  let navigate = useNavigate();
 
   const navData = [
     {
-      'text': 'List of Appointments',
-      'link': '/'
+      'text': 'Profile',
+      'icon': null
     },
     {
-      'text': 'List of Hospitals',
-      'link': '/'
+      'text': 'Pending Appointments',
+      'icon': null
+    },
+    {
+      'text': 'Appointment history',
+      'icon': null
     }
   ]
 
-  // localStorage.setItem("userDetail", JSON.stringify(userDetail));
+  const [currentSelection, setCurrentSelection] = useState(0);
+  const [userList, setUserList] = useState([]);
+  const [filterList, setFilterList] = useState([]);
+
+  var title, BodyContent;
+
+  if (currentSelection === 0) {
+      title = "PROFILE";
+      BodyContent = Profile;
+  }
+  else if (currentSelection === 1) {
+      title = "PENDING APPOINTMENTS";
+      BodyContent = PendingAppointments;
+  }
+  else {
+      title = "APPOINTMENT HISTORY";
+      BodyContent = AppointmentHistory;
+  }
+
   useEffect(() => {
     setUserDetail(JSON.parse(localStorage.getItem("userDetail")))
+    CustomAxios.get('appointments', {})
+    .then((response) => {
+      console.log("appointment fetch =", response);
+      setAppointmentList(response.data.appointments)
+      CustomAxios.get('patients', {})
+      .then((response) => {
+        console.log("patients =", response);
+        setPatientList(response.data.patients)
+        localStorage.setItem("patientList", JSON.stringify(response.data.patients))
+      })
+      .catch((err) => {
+        console.log(err)
+    });
+
+    })
+    .catch((err) => {
+      console.log(err)
+    });
   }, []);
 
-  // if(userDetail.role == 1) return (<)
   return(
-    <div className="doctor-page">
-      <Navigation data={navData} />
-      <div className="doctor-info">
-        You are currently logged in as 
-      </div>
-      <div className="doctor-card">
-        <div className="doctor-card-name">
-          Dr. {userDetail.first_name} {userDetail.last_name}
-        </div>
-      </div>
-    </div>
+    <div className="admin-page">
+      <Navigation 
+        data={navData} 
+        currentSelection={currentSelection}
+        changeSelection={setCurrentSelection} />
+      
+    <BodyContent 
+    title={title} 
+    profile={userDetail}
+    appointments={appointmentList}
+    />
+  </div>
   )
 }
 
