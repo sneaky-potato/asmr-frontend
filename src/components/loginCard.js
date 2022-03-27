@@ -1,32 +1,31 @@
 import React, { useState, useEffect } from "react";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import { BACKEND_URL } from "../constants";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import CustomAxios from "../utils/customAxios";
+import { Notyf } from 'notyf';
+
 
 export default function LoginCard() {
-
+  
+  const notyf = new Notyf();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  
   function validateForm() {
     return email.length > 0 && password.length > 0;
   }
-
+  
   let navigate = useNavigate()
-
-  useEffect(() => {
-
-    // if (localStorage.getItem("refresh_token") !== null) setHospitalList(JSON.parse(localStorage.getItem("hospitalList")));
+  
+  useEffect(() => {    
     if(localStorage.getItem("refresh_token")) 
     {
       axios.post(`${BACKEND_URL}/api/auth/token/refresh/`, {
         refresh: JSON.parse(localStorage.getItem("refresh_token"))
       }).then((response) => {
-        console.log("already logged in")
         navigate('/ocms/me');
+        notyf.success("Already logged in")
 
       }).catch((err) => {
         console.log(err);
@@ -37,120 +36,62 @@ export default function LoginCard() {
 
   async function h(event) {
     event.preventDefault();
-
-    if(localStorage.getItem('refresh_token') === null)
-    {
-      console.log("refresh token not found")
       axios.post(`${BACKEND_URL}/api/auth/token/obtain/`, {
         email: email,
         password: password
       }).then((response) => {
-        console.log("generated refresh token");
         localStorage.setItem("refresh_token", JSON.stringify(response.data.refresh));
-        CustomAxios.post('login', {
-          email: email,
-          password: password
-        }).then((response) => {
-          console.log("ogged in =", response);
-          navigate('/ocms/me')
-        })
-        .catch((err) => {
-          console.log(err)
-        }) 
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-    }
-    else
-    {
-      console.log("logging in the user")
-      CustomAxios.post('login', {
-        email: email,
-        password: password
-      }).then((response) => {
-        console.log("ogged in =", response);
-        navigate('/ocms/me')
-      })
-      .catch((err) => {
-        console.log(err)
-      })  
-    }
-    
-  }
-
-  async function handleSubmit(event) {
-    event.preventDefault();
-      axios.post(`${BACKEND_URL}/api/auth/login`, {
-          email: email,
-          password: password
-      }).then((response) => {
-          console.log(response);
-
-          localStorage.setItem("access_token", JSON.stringify(response.data.access));
-          localStorage.setItem("refresh_token", JSON.stringify(response.data.refresh));
-
-          axios.get(`${BACKEND_URL}/api/auth/ping`, {
-            headers: {
-              'content-type': 'application/json',
-              'Authorization': 'Bearer ' + JSON.parse(localStorage.getItem("access_token"))
-            }
+          CustomAxios.post('login', {
+            email: email,
+            password: password
           }).then((response) => {
-            console.log("redirct from ping");
+            notyf.success("Successfully logged in")
             navigate('/ocms/me')
-        })
-        .catch((err) => {
-          console.log(err);
-          if (err.response.status == 401) {
-            axios.post(`${BACKEND_URL}/api/auth/token/refresh/`, {
-              refresh: JSON.parse(localStorage.getItem("refresh_token"))
-            })
-            .then((response) => {
-              console.log("redirected from refresh")
-              console.log(response);
-              localStorage.setItem("access_token", JSON.stringify(response.data.access));
-
-              navigate('/ocms/me')
-            })
-            .catch((err) => {
-              console.log(err);
-              // Handle refresh token expiration
-              
-
-              
-            })
-          }
-        });
-    })
-    .catch((err) => {
-        console.log(err);
-    });
-  }
+          })
+          .catch((err) => {
+            if(!err.response)
+            {
+              notyf.error("Please wait for the admin to approve")
+              localStorage.removeItem("access_token")
+              localStorage.removeItem("refresh_token")
+            } else {
+            notyf.error("Some error occurred")
+            console.log(err)
+            }
+          }) 
+      }).catch((err) => {
+        console.log(err)
+        notyf.error("Email or password incorrect")
+      })
+    }
 
   return (
     <div className="Login">
-      <Form onSubmit={h} className="login-form">
-        <Form.Group size="lg" controlId="email" className="login-email-box">
-          <Form.Label>Email</Form.Label>
-          <Form.Control
+      <form onSubmit={h} className="login-form">
+        <div className="form-group">
+          Login 
+        </div>
+        <div className="form-group">
+          <label className="form-label">Email</label>
+          <input
             autoFocus
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-        </Form.Group>
-        <Form.Group size="lg" controlId="password" className="login-password-box">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
+        </div>
+        <div className="form-group">
+          <label className="lable-form">Password</label>
+          <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </Form.Group>
-        <Button block size="lg" type="submit" disabled={!validateForm()}>
+          </div>
+        <button type="submit"  className="form-button" disabled={!validateForm()}>
           Login
-        </Button>
-      </Form>
+        </button>
+      </form>
     </div>
   );
 }
