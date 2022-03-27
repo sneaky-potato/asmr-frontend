@@ -7,6 +7,8 @@ import PatientRegisterCard from "./components/patientRegisterCard";
 import LoginCard from "./components/loginCard";
 import ProfilePage from "./views/profilePage";
 
+import 'notyf/notyf.min.css';
+
 function App() {
   return (
     <div className="App">
