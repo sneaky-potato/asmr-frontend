@@ -2,9 +2,14 @@ import { useState, useEffect } from "react";
 import Navigation from "../components/navbar";
 import CustomAxios from "../utils/customAxios";
 import DoctorCard from "../components/doctorCard";
+import AppointmentCard from "../components/appointmentCard";
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowAltCircleRight } from '@fortawesome/free-solid-svg-icons'
+
+
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 
 const Profile = (props) => {
   return (
@@ -34,7 +39,7 @@ const BookAppointmentContent = (props) => {
   const [startDate, setStartDate] = useState(new Date());
   return(
     <div className="appointment-content">
-      <div className="appointment-date"><label className="type-label">Select Date: </label><DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+      <div className="appointment-date"><label className="type-label">Select Date: </label><DatePicker wrapperClassName="datePicker" className="picker" selected={startDate} onChange={(date) => setStartDate(date)} />
         </div>
       { 
         props.availDoctorList.map((doctor, index) => {
@@ -74,10 +79,17 @@ const BookAppointment = (props) => {
   function pincodeSearch(event)
   {
     event.preventDefault();
-    const availableDoctors = doctorList.filter((doctor, index) => {
-      return doctor.pincode == pincode
-    })
     setShow(true)
+    let availableDoctors;
+    if(pincode == "") 
+    {
+      availableDoctors = doctorList;
+    } else {
+      availableDoctors = doctorList.filter((doctor, index) => {
+        return doctor.pincode == pincode
+      })
+    }
+    
     setAvailDoctorList(availableDoctors)
     console.log(availDoctorList)
   }
@@ -100,13 +112,15 @@ const BookAppointment = (props) => {
   return(
     <div className="appointment-container">
       <div className="appointment-pincode">
-        <label className="type-label">Input pin code: </label>
-          <input id="pincode" type="text" onChange={(e) => 
+        {/* <label className="type-label">Input pin code: </label>   */}
+          <input className="pincode-input pincode-child" type="text" placeholder="PIN CODE" onChange={(e) => 
             {
               setPincode(e.target.value)
               if(!(/^\d+$/.test(pincode) && pincode.length == 6)) {setShow(false)}
           }} value={pincode} />
-          <button className="navbar-button button" disabled={!checkPincode} onClick={pincodeSearch}>Search</button>
+          <button className="pincode-button pincode-child" disabled={!checkPincode} onClick={pincodeSearch}>
+            <FontAwesomeIcon  className="pincode-icon" icon={faArrowAltCircleRight} />
+          </button>
       </div>
       <BodyContent availDoctorList={availDoctorList} />
     </div>
@@ -129,19 +143,21 @@ const AppointmentHistory = (props) => {
   return(
     <div className="appointment-list">
       {
-        appointmentList.map((appointment, index) => {
-          return(
-            <div className="appointment" key={index}>
-              <div className="appointment-doctor">
-                Appointment with Dr. {JSON.parse(localStorage.getItem("doctors")).find((doctor) => {
-                  return doctor.id == appointment.doctor_id
-                }).first_name}
-                </div>
-              {appointment.description}
-            </div>
-          )
-        })
-      }
+      appointmentList.map((appointment, index) => {
+      return(
+        <AppointmentCard 
+          key={index}
+          id={appointment.id}
+          doctor={appointment.doctor_id}
+          patient={appointment.patient_id}
+          date={appointment.date}
+          description={appointment.description}
+          byPatient={true}
+          // pending={true}
+        />
+      )
+    })
+  }
     </div>
   )
 }
@@ -162,7 +178,7 @@ const PatientPage = () => {
       'icon': null
     },
     {
-      'text': 'View appointment',
+      'text': 'Appointment history',
       'icon': null
     }
   ]
