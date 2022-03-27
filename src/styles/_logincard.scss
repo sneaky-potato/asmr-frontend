@@ -1,16 +1,59 @@
-.login-form {
+.Login {
+    min-height: 100vh;
+    height: fit-content;
+    background-color: #141628;
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 50%;
-    height: 50%;
+}
 
-    .login-email-box {
+.login-form {
+    height: 50%;
+    width: 30%;
+    min-width: fit-content;
+    background: linear-gradient(to top, #191d23, #232a34);
+    border-radius: 30px;
+    color: #fb446c;
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-shadow: 2px 2px 8px #FF0000;
+    padding: 2rem;
+
+    .form-group {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
-
+        margin: 2rem;
+        input {
+            background: #141628;
+            border-radius: 5px;
+            color: #fefefe;
+            -webkit-transition: 0.2s;
+            transition: 0.2s;
+            outline: none;
+            padding: 10px;
+        }
+        input:focus{
+            border-color: rgb(80, 243, 175);
+        }
+    }
+    .form-button {
+        width: 50%;
+        margin: 0 auto;
+        background-color: rgb(255, 227, 68);
+        color: #26293f;
+        font-size: 1.4rem;
+        font-weight: 600;
+        border-width: 2px;
+        border-style: solid;
+        border-color: #26293f;
+        border-radius: 10px;
+        padding: 1.05rem;
+        -webkit-transition: 0.3s;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+    .form-button:hover {
+        padding: 1.2rem;
     }
 }
