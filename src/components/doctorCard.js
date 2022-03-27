@@ -8,7 +8,8 @@ const DoctorCard = (props) => {
       CustomAxios.post('appointments', {
         doctor_id: props.id, 
         patient_id: user.id,
-        description: 'haha',
+        description: 'lodupanti',
+        date: (props.date).toISOString().slice(0,10)
       }).then((response) => {
         console.log("appointment creted =", response);
         window.location.reload(true)
@@ -45,8 +46,8 @@ const DoctorCard = (props) => {
 
     return (
         <div className="doctor-card">
-            <div className="doctor-title">Dr. {props.name}</div>
-            <div className="doctor-title-surname">{props.lastname}</div>
+            <div className="doctor-title">Dr. {props.name} {props.lastname}</div>
+            {/* <div className="doctor-title-surname"></div> */}
             <div className="doctor-hospital">{props.hospital}</div>
             <div className="doctor-speciality">{props.speciality}</div>
             <div className="doctor-address">{props.address}</div>
@@ -54,7 +55,8 @@ const DoctorCard = (props) => {
             <div className="doctor-contact">{props.contact}</div>
             <div className="doctor-email">{props.email}</div>
             {
-              props.byAdmin ? <button className="navbar-button button" onClick={handleAccept}>Accept</button>
+              props.byAdmin ? ( props.toAccept ? <button className="navbar-button button" onClick={handleAccept}>Accept</button> 
+              : <button className="navbar-button button" onClick={handleAccept}>Remove</button> )
               : <button className="navbar-button button" onClick={handleAppointment}>Book appointment</button>
             }
         </div>
