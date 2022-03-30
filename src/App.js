@@ -6,6 +6,7 @@ import DoctorRegisterCard from "./components/doctorRegisterCard";
 import PatientRegisterCard from "./components/patientRegisterCard";
 import LoginCard from "./components/loginCard";
 import ProfilePage from "./views/profilePage";
+import NotFound from "./pages/notFound";
 
 import 'notyf/notyf.min.css';
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/ocms/register/patient" element={<PatientRegisterCard />} />
           <Route path="/ocms/login" element={<LoginCard />} />
           <Route path="/ocms/me" element={<ProfilePage />} />
+          <Route path="/ocms/404" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>
