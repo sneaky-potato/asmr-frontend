@@ -5,6 +5,21 @@ import CustomAxios from "../utils/customAxios";
 import AppointmentCard from "../components/appointmentCard";
 
 const Profile = (props) => {
+  const [appointmentList, setAppointmentList] = useState([]);
+  
+  useEffect(() => {
+    CustomAxios.get('appointments', {})
+    .then((response) => {
+      console.log("appointment fetch =", response);
+      setAppointmentList(response.data.appointments)
+      localStorage.setItem('appointmentList', JSON.stringify(response.data.appointments))
+
+    })
+    .catch((err) => {
+      console.log(err)
+    }) 
+  }, []);
+
   return (
   <div className="profile">
     <div className="patient-card">
