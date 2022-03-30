@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import HospitalCard from "../components/hospitalCard";
 import { BACKEND_URL } from '../constants';
-import axios from 'axios';
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { Notyf } from "notyf";
 
 
 const Hospitals = () => {
+    const notyf = new Notyf();
 
     const [hospitalList, setHospitalList] = useState([]);
+    
 
     useEffect(() => {
 
@@ -23,20 +26,24 @@ const Hospitals = () => {
 
     localStorage.setItem("hospitalList", JSON.stringify(hospitalList));
 
+    
+
     let navigate = useNavigate();
 
     return (
-        <div className="hospital-list">
-            {
-                hospitalList.map((hospital, index) => {
-                    return (<HospitalCard 
-                        key={index} 
-                        name={hospital.name} 
-                        address={hospital.address} 
-                        pincode={hospital.pincode}
-                        index={index} />);
-                })
-            }
+        <div className="hospital-container">
+            <div className="hospital-list">
+                {
+                    hospitalList.map((hospital, index) => {
+                        return (<HospitalCard 
+                            key={index} 
+                            name={hospital.name} 
+                            address={hospital.address} 
+                            pincode={hospital.pincode}
+                            index={index} />);
+                    })
+                }
+            </div>
         </div>
   );
 }
