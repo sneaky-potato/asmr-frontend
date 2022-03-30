@@ -1,6 +1,9 @@
 import CustomAxios from "../utils/customAxios";
+import { Notyf } from "notyf";
 
 const AppointmentCard = (props) => {
+
+  const notyf = new Notyf();
 
   let patients;
   let doctors;
@@ -18,7 +21,7 @@ const AppointmentCard = (props) => {
   }
 
   async function handleAcceptAppointment(event) {
-    event.preventDefault();
+    console.log(props.date)
     CustomAxios.put(`appointments/${props.id}/`, {
       id: props.id,
       doctor_id: props.doctor, 
@@ -53,7 +56,7 @@ const AppointmentCard = (props) => {
     })
     
   }
-
+  
   return(
     <div className="appointment-card">
       <div className="appointment-title">Appointment with</div>
@@ -75,7 +78,7 @@ const AppointmentCard = (props) => {
       </div>
       <div className="appointment-status">
         {
-          (props.status == 1) ? 'ACCEPTED' : (props.status == 2 ? 'PENDING' : 'DECLINED')
+          (props.status == 1) ? <div className="green">ACCEPTED</div> : (props.status == 2 ? <div className="yellow">PENDING</div> : <div className="red">DECLINED</div>)
         }
       </div> 
     </div>

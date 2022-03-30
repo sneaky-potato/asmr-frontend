@@ -16,13 +16,13 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/ocms" element={<MainPage />} />
-          <Route path="/ocms/hospitals" element={<Hospitals />} />
-          <Route path="/ocms/register/doctor" element={<DoctorRegisterCard />} />
-          <Route path="/ocms/register/patient" element={<PatientRegisterCard />} />
-          <Route path="/ocms/login" element={<LoginCard />} />
-          <Route path="/ocms/me" element={<ProfilePage />} />
-          <Route path="/ocms/404" element={<NotFound />} />
+          <Route path="/omcs" element={<MainPage />} />
+          <Route path="/omcs/hospitals" element={<Hospitals />} />
+          <Route path="/omcs/register/doctor" element={<DoctorRegisterCard />} />
+          <Route path="/omcs/register/patient" element={<PatientRegisterCard />} />
+          <Route path="/omcs/login" element={<LoginCard />} />
+          <Route path="/omcs/me" element={<ProfilePage />} />
+          <Route path="/omcs/404" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </div>

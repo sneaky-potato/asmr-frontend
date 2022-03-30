@@ -3,10 +3,8 @@ import Navigation from "../components/navbar";
 import CustomAxios from "../utils/customAxios";
 import DoctorCard from "../components/doctorCard";
 import AppointmentCard from "../components/appointmentCard";
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowAltCircleRight } from '@fortawesome/free-solid-svg-icons'
-
+// import { UilTimes } from '@iconscout/react-unicons';
+import { UilSearch } from '@iconscout/react-unicons'
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -39,8 +37,10 @@ const BookAppointmentContent = (props) => {
   const [startDate, setStartDate] = useState(new Date());
   return(
     <div className="appointment-content">
-      <div className="appointment-date"><label className="type-label">Select Date: </label><DatePicker wrapperClassName="datePicker" className="picker" selected={startDate} onChange={(date) => setStartDate(date)} />
-        </div>
+      <div className="appointment-date">
+        <label className="type-label">Select Date: </label>
+        <DatePicker wrapperClassName="datePicker" className="picker" selected={startDate} onChange={(date) => setStartDate(date)} />
+      </div>
       { 
         props.availDoctorList.map((doctor, index) => {
             return(
@@ -116,10 +116,11 @@ const BookAppointment = (props) => {
           <input className="pincode-input pincode-child" type="text" placeholder="PIN CODE" onChange={(e) => 
             {
               setPincode(e.target.value)
-              if(!(/^\d+$/.test(pincode) && pincode.length == 6)) {setShow(false)}
+              if(!(/^\d+$/.test(pincode) && pincode.length === 6)) {setShow(false)}
           }} value={pincode} />
           <button className="pincode-button pincode-child" disabled={!checkPincode} onClick={pincodeSearch}>
-            <FontAwesomeIcon  className="pincode-icon" icon={faArrowAltCircleRight} />
+            {/* <FontAwesomeIcon  className="pincode-icon" icon={faArrowAltCircleRight} /> */}
+            <UilSearch color="white"/>
           </button>
       </div>
       <BodyContent availDoctorList={availDoctorList} />

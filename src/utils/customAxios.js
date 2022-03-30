@@ -59,7 +59,7 @@ function refreshToken() {
     return CustomAxios.post("token/refresh/", {
         refresh: JSON.parse(localStorage.getItem("refresh_token")),
     }).catch((err) => {
-        window.location.href = `${FRONTEND_URL}/ocms/login`;
+        window.location.href = `${FRONTEND_URL}/omcs/login`;
         console.log(err)
     });
   }

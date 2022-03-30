@@ -51,7 +51,7 @@ const DoctorRegisterCard = () => {
               console.log(result.data)
               console.log("USER created successfully")
               notyf.success("User created successfully")
-              navigate("/ocms/login")              
+              navigate("/omcs/login")              
             }
     ).catch (error => {
         console.log(error);
@@ -64,10 +64,13 @@ const DoctorRegisterCard = () => {
   console.log(validateForm())
   return (
     <div className="Login">
+      <div className="form-title">Register</div>
       <form onSubmit={onLoginFormSubmit} className="login-form">
         <div className="form-group">
-          <label className="form-label">Email</label>
+          {/* <label className="form-label">Email</label> */}
           <input
+            required
+            placeholder='Email'
             autoFocus
             type="email"
             value={email}
@@ -75,8 +78,10 @@ const DoctorRegisterCard = () => {
           />
         </div>
         <div className="form-group">
-          <label className="form-label">Password</label>
+          {/* <label className="form-label">Password</label> */}
           <input
+            required
+            placeholder='Password'
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -84,8 +89,10 @@ const DoctorRegisterCard = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Name</label>
+          {/* <label className="form-label">Name</label> */}
           <input
+            required
+            placeholder='First Name'
             type="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -93,8 +100,10 @@ const DoctorRegisterCard = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Last Name</label>
+          {/* <label className="form-label">Last Name</label> */}
           <input
+            placeholder='Last Name'
+            required
             type="lastname"
             value={lastname}
             onChange={(e) => setLastname(e.target.value)}
@@ -102,8 +111,10 @@ const DoctorRegisterCard = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Address</label>
+          {/* <label className="form-label">Address</label> */}
           <input
+            placeholder='Address'
+            required
             type="address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
@@ -111,24 +122,29 @@ const DoctorRegisterCard = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Contact</label>
+          {/* <label className="form-label">Contact</label> */}
           <input
+            placeholder='Contact'
+            required
             type="contact"
             value={contact}
             onChange={(e) => setContact(e.target.value)}
           />
         </div>
-
-        <label>Hospital</label>
-        <select onChange={(e) => setHospital(parseInt(e.target.value))}>
-            {hospitalList.map((option) => (
-              <option value={option.id}>{option.name}</option>
-            ))}
-        </select>
+        <div className="form-group hospital">
+          <label>Hospital</label>
+          <select className='form-select' onChange={(e) => setHospital(parseInt(e.target.value))}>
+              {hospitalList.map((option) => (
+                <option value={option.id}>{option.name}</option>
+              ))}
+          </select>
+        </div>
 
         <div className="form-group">
-        <label className="form-label">Specification</label>
+        {/* <label className="form-label">Specification</label> */}
         <input
+            placeholder='Specification'
+            required
             type="spec"
             value={spec}
             onChange={(e) => setSpec(e.target.value)}
@@ -136,8 +152,10 @@ const DoctorRegisterCard = () => {
         </div>
         
         <div className="form-group">
-        <label className="form-label">Pin code</label>
+        {/* <label className="form-label">Pin code</label> */}
         <input
+            placeholder='Pin Code'
+            required
             type="pincode"
             value={pin}
             onChange={(e) => setPin(e.target.value)}

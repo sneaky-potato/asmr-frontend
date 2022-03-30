@@ -24,7 +24,7 @@ export default function LoginCard() {
       axios.post(`${BACKEND_URL}/api/auth/token/refresh/`, {
         refresh: JSON.parse(localStorage.getItem("refresh_token"))
       }).then((response) => {
-        navigate('/ocms/me');
+        navigate('/omcs/me');
         notyf.success("Already logged in")
 
       }).catch((err) => {
@@ -46,7 +46,7 @@ export default function LoginCard() {
             password: password
           }).then((response) => {
             notyf.success("Successfully logged in")
-            navigate('/ocms/me')
+            navigate('/omcs/me')
           })
           .catch((err) => {
             if(!err.response)
@@ -67,13 +67,12 @@ export default function LoginCard() {
 
   return (
     <div className="Login">
-      <form onSubmit={h} className="login-form">
+      <div className="form-title">Login</div>
+      <form onSubmit={h} className="login-form">  
         <div className="form-group">
-          Login 
-        </div>
-        <div className="form-group">
-          <label className="form-label">Email</label>
+          {/* <label className="form-label">Email</label> */}
           <input
+            placeholder="Email"
             autoFocus
             type="email"
             value={email}
@@ -81,8 +80,9 @@ export default function LoginCard() {
           />
         </div>
         <div className="form-group">
-          <label className="lable-form">Password</label>
+          {/* <label className="lable-form">Password</label> */}
           <input
+            placeholder="Password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}

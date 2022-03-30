@@ -36,7 +36,7 @@ const PatientRegisterCard = () => {
               console.log(result.data)
               console.log("USER created successfully")
               notyf.success("User created successfully")
-              navigate("/ocms/login")
+              navigate("/omcs/login")
             }
     ).catch (error => {
         console.log(error);
@@ -48,10 +48,13 @@ const PatientRegisterCard = () => {
   }
   return (
     <div className="Login">
+      <div className="form-title">Register</div>
       <form onSubmit={onLoginFormSubmit} className="login-form">
         <div className="form-group">
-          <label className="form-label">Email</label>
+          {/* <label className="form-label">Email</label> */}
           <input
+            placeholder='Email'
+            required
             autoFocus
             type="email"
             value={email}
@@ -59,8 +62,10 @@ const PatientRegisterCard = () => {
           />
         </div>
         <div className="form-group">
-          <label className="form-label">Password</label>
+          {/* <label className="form-label">Password</label> */}
           <input
+            placeholder='Password'
+            required
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -68,8 +73,10 @@ const PatientRegisterCard = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Name</label>
+          {/* <label className="form-label">Name</label> */}
           <input
+            placeholder='First Name'
+            required
             type="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -77,8 +84,10 @@ const PatientRegisterCard = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Last Name</label>
+          {/* <label className="form-label">Last Name</label> */}
           <input
+            placeholder='Last Name'
+            required
             type="lastname"
             value={lastname}
             onChange={(e) => setLastname(e.target.value)}
@@ -86,8 +95,10 @@ const PatientRegisterCard = () => {
         </div>
 
         <div className="form-group">
-          <label className="form-label">Address</label>
+          {/* <label className="form-label">Address</label> */}
           <input
+            placeholder='Address'
+            required
             type="address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
@@ -95,8 +106,10 @@ const PatientRegisterCard = () => {
         </div>
 
         <div className="form-group" >
-          <label className="form-label">Contact</label>
+          {/* <label className="form-label">Contact</label> */}
           <input
+            placeholder='Contact'
+            required
             type="contact"
             value={contact}
             onChange={(e) => setContact(e.target.value)}
@@ -104,8 +117,10 @@ const PatientRegisterCard = () => {
         </div>
         
         <div className="form-group">
-        <label className="form-label">Pin code</label>
+        {/* <label className="form-label">Pin code</label> */}
         <input
+            placeholder='Pin Code'
+            required
             type="pincode"
             value={pin}
             onChange={(e) => setPin(e.target.value)}

@@ -6,6 +6,7 @@ import DoctorCard from "../components/doctorCard";
 import { BACKEND_URL } from '../constants';
 import axios from "axios";
 import { Notyf } from "notyf";
+import HospitalCard from "../components/hospitalCard";
 
 const isPendingDoctor = (doctor) => {
   return (doctor.pending == 1);
@@ -16,11 +17,11 @@ const isNotPendingDoctor = (doctor) => {
 const Profile = (props) => {
   return (
   <div className="profile">
+    <div className="admin-card">
     <div className="profile-title title">{props.title}</div>
     <div className="admin-info">
       You are currently logged in as 
     </div>
-    <div className="admin-card">
       <div className="admin-card-name">
         {props.email}
       </div>
@@ -94,6 +95,8 @@ const ListOfDoctors = (props) => {
 
 const ListOfHospitals = (props) => {
 
+  const [hospitalList, setHospitalList] = useState([]);
+
   const notyf = new Notyf();
 
   const [hospitalName, setHospitalName] = useState("");
@@ -111,50 +114,85 @@ const ListOfHospitals = (props) => {
           console.log(result.data)
           console.log("hospital created successfully")
           notyf.success("Hospital added to database")
+          window.location.reload(true)
         }
 ).catch (error => {
     console.log(error);
     notyf.error("Some error occurred")
 })
 }
+
+useEffect(() => {
+  CustomAxios.get('hospitals')
+  .then((response) => {
+    console.log(response)
+    setHospitalList(response.data.hospitals)
+    // localStorage.setItem("doctors", JSON.stringify(response.data.doctors))
+  })
+  .catch((err) => console.log(err))
+}, []);
+
   function validateForm() {
     return hospitalName.length > 0 && hospitalPin.length > 0;
   }
-  return(
-    <div className="hospital-form">
-            <form onSubmit={OnAddHospital} className="login-form">
-        <div className="form-group">
-          {/* <label className="form-label">Na</label> */}
-          <input
-            placeholder="Hospital Name"
-            autoFocus
-            type="text"
-            value={hospitalName}
-            onChange={(e) => setHospitalName(e.target.value)}
-          />
-        </div>
-        <div className="form-group">
-          <input
-            placeholder="Hospital Address"
-            type="text"
-            value={hospitalAddress}
-            onChange={(e) => setHospitalAddress(e.target.value)}
-          />
-        </div>
 
-        <div className="form-group">
-          <input
-            placeholder="Hospital Pin code"
-            type="text"
-            value={hospitalPin}
-            onChange={(e) => setHospitalPin(e.target.value)}
-          />
+  return(
+    <div className="container">
+      <div className="hospital-label">
+        Register New Hospital
+      </div>
+      <div className="hospital-form">
+        <form onSubmit={OnAddHospital} className="login-form">
+          <div className="form-group">
+            {/* <label className="form-label">Na</label> */}
+            <input
+              placeholder="Hospital Name"
+              autoFocus
+              type="text"
+              value={hospitalName}
+              onChange={(e) => setHospitalName(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <input
+              placeholder="Hospital Address"
+              type="text"
+              value={hospitalAddress}
+              onChange={(e) => setHospitalAddress(e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
+            <input
+              placeholder="Hospital Pin code"
+              type="text"
+              value={hospitalPin}
+              onChange={(e) => setHospitalPin(e.target.value)}
+            />
         </div>
         <button type="submit" className="form-button" disabled={!validateForm()}>
           Register
         </button>
       </form>
-            </div>
+      </div>
+      <div className="hospital-label">
+        Registered Hospitals
+      </div>
+    <div className="hospital-container">
+    <div className="hospital-list">
+        {
+            hospitalList.map((hospital, index) => {
+                return (<HospitalCard 
+                    key={index} 
+                    name={hospital.name} 
+                    address={hospital.address} 
+                    pincode={hospital.pincode}
+                    index={index} />);
+            })
+        }
+    </div>
+</div>
+</div>
   )
 }
 
@@ -193,7 +231,7 @@ const AdminPage = () => {
       BodyContent = ListOfDoctors;
   }
   else {
-      title = "LIST OF HOSPITALS";
+      title = "HOSPITAL REGISTRATION";
       BodyContent = ListOfHospitals;
   }
  
@@ -221,6 +259,7 @@ const AdminPage = () => {
         changeSelection={setCurrentSelection} />
       
     <BodyContent 
+    title={title}
     email={userDetail.email}
     userList={userList}/>
   </div>

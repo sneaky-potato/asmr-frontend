@@ -5,15 +5,16 @@
     margin: 2rem 3rem;
     border-radius: 10px;
     overflow: hidden;
-    padding: 2rem;
+    padding: 2rem; 
     box-sizing: border-box;
     font-family: "Overpass", sans-serif;
     background: linear-gradient(to top, #191d23, #232a34);
     border-radius: 30px;
+
     .doctor-title {
       margin: 20px 0 10px 0;
-    color: #fefefe;
-    font-size: 1.5rem;
+      color: #fefefe;
+      font-size: 1.5rem;
     }
     button {
         width: 100%;

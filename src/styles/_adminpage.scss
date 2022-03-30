@@ -8,6 +8,13 @@
 
 }
 
+.profile-title {
+    font-family: 'Fira Code', monospace;
+    font-family: 'Roboto Slab', serif;
+    font-size: 1.5rem;
+    padding: 1.4rem;
+}
+
 .admin-info {
     
     font-family: 'Fira Code', monospace;
@@ -18,6 +25,7 @@
     width: 50%;
     height: 50%;
     display: flex;
+    flex-direction: column;
     margin: auto;
     justify-content: center;
     align-items: center;
@@ -34,6 +42,22 @@
 }
 
 .doctor-label {
+    font-family: 'Fira Code', monospace;
+    font-family: 'Roboto Slab', serif;
+    font-size: 1.5rem;
+    padding: 1.4rem;
+}
+
+.hospital-container {
+    min-height: 100vh;
+    height: fit-content;
+}
+.hospital-form {
+    display: flex;
+    padding-top: 3rem;
+    justify-content: center;
+}
+.hospital-label {
     font-family: 'Fira Code', monospace;
     font-family: 'Roboto Slab', serif;
     font-size: 1.5rem;

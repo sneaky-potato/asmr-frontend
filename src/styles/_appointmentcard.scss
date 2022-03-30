@@ -1,12 +1,17 @@
 .appointment-card {
-    height: fit-content;
-    margin: 2rem;
-    width: 70%;
+    display: inline-block;
+    margin: 2rem 3rem;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 2rem; 
+    box-sizing: border-box;
+    font-family: "Overpass", sans-serif;
     background: linear-gradient(to top, #191d23, #232a34);
-    border-radius: 30px;
     .appointment-title {
-        margin: 1.2rem;
-    }
+        margin: 20px 0 10px 0;
+        color: #fefefe;
+        font-size: 1.5rem;
+    } 
     .appointment-description {
         margin: 1.2rem;
     }
@@ -40,4 +45,16 @@
             background-color: #e6e6e6;
         }
     }
+}
+
+.green {
+    color: rgb(0, 255, 0);
+}
+
+.yellow {
+    color: yellow;
+}
+
+.red {
+    color: red;
 }

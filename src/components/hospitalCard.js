@@ -1,6 +1,4 @@
 const HospitalCard = (props) => {
-    console.log(props)
-
     return (
         <div className="hospital-card">
             <div className="hospital-title">{props.name}</div>

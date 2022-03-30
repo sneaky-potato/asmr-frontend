@@ -14,6 +14,37 @@ const DoctorCard = (props) => {
     const user = JSON.parse(localStorage.getItem("userDetail"));
     console.log(user)
     async function handleAppointment(event) {
+      const d = new Date()
+    event.preventDefault();
+
+      let currdate = (props.date).toISOString()
+
+    let year = currdate.slice(0, 4)
+    let month = currdate.slice(5, 7)
+    let day = currdate.slice(9, 11)
+
+    console.log(parseInt(year), parseInt(month), parseInt(day), d.getFullYear(), d.getMonth(), d.getDay())
+
+    if(parseInt(year) == d.getFullYear())
+    {
+      if(parseInt(month) == d.getMonth() + 1)
+      {
+        if(parseInt(day) < d.getDate())
+        {
+          notyf.error("Invalid date!")
+          return;
+        }
+      } else if(parseInt(month) < d.getMonth() + 1)
+
+      {
+        notyf.error("Invalid date!")
+        return;
+      }
+    } else if (parseInt(year) < d.getFullYear())
+    {
+      notyf.error("Invalid date!")
+      return
+    }
       event.preventDefault();
       CustomAxios.post('appointments', {
         doctor_id: props.id, 

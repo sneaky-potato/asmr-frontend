@@ -19,7 +19,7 @@ const LandingPage = () => {
                 Tech Stack
             </div>
             <div className="landing-header-btn">
-                Continue to OCMS
+                Continue to omcs
             </div>
           </div>
           
@@ -28,8 +28,8 @@ const LandingPage = () => {
         <div className="landing-title-text">
             Online Medical Consultation System
         </div>
-        <div className="landing-title-btn link" onClick={() => navigate("/ocms")}>
-            Continue to OCMS
+        <div className="landing-title-btn link" onClick={() => navigate("/omcs")}>
+            Continue to omcs
         </div>
       </div>
       <div className="landing-team">

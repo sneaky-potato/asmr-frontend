@@ -1,10 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@500&display=swap');
-
+* {
+    scroll-behavior: smooth;
+}
 .main-page {
     background-color: #141628;
+    // background: linear-gradient(
+    //   rgba(#0f111a, 0.8),
+    //   rgba(#0f111a, 0.8)
+    // ),
+    
 }
 
 .main-header {
+    position: fixed;    
+    width: 100%;
+    opacity: 80%;
     font-size: 1.3rem;
     color: #a1a7e4;
     background-color: #101224;
@@ -15,6 +25,9 @@
     .main-header-sf {
         font-size: 1.2rem;
         padding: 1.2rem;
+    }
+    .main-header-icon {
+        margin: 0 1.2rem 0 1.2rem;
     }
 
     .main-btns {
@@ -33,15 +46,22 @@
             font-size: 1rem;
             cursor: pointer;
         }
+        .link:hover {   
+            background: #a1a7e4;
+            color: #141628;
+        }
     }
 }
 
 .main-title {
+    // color: #fff;
+    background:  url("../assets/landing.jpg");
+    background-size: cover;
+    color: #131a5c;
     font-family: 'Roboto Slab', serif;
     font-size: 3rem;
-    padding: 1.5rem;
+    padding: 1rem;
     height: 100vh;
-    color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -60,4 +80,26 @@
             background-color: #ee1544;
         }
     }
+}
+
+.webflow {
+    height: 200vh;
+}
+
+.webflow-heading {
+    color: #fff;
+    font-family: 'Roboto Slab', serif;
+    font-size: 3rem;
+    padding: 1rem;
+}
+.webflow-img {
+    height: 225vh;
+    min-height: fit-content;
+}
+
+.inside-img{
+    height: 100%;
+    width: auto;
+    background: url('../assets/webflow.png');
+    background-size: cover  ;
 }
