@@ -134,6 +134,7 @@ const AppointmentHistory = (props) => {
     .then((response) => {
       console.log("appointment fetch =", response);
       setAppointmentList(response.data.appointments)
+      localStorage.setItem('appointmentList', JSON.stringify(response.data.appointments))
 
     })
     .catch((err) => {
@@ -153,6 +154,7 @@ const AppointmentHistory = (props) => {
           date={appointment.date}
           description={appointment.description}
           byPatient={true}
+          status={appointment.status}
           // pending={true}
         />
       )
