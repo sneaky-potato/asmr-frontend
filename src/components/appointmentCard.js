@@ -2,12 +2,20 @@ import CustomAxios from "../utils/customAxios";
 
 const AppointmentCard = (props) => {
 
-  let patients = (JSON.parse(localStorage.getItem("patientList"))).find((patient, index) => {
-    return patient.id == props.patient;
-  })
-  let doctors = (JSON.parse(localStorage.getItem("doctors"))).find((doctor, index) => {
-    return doctor.id == props.doctor;
-  })
+  let patients;
+  let doctors;
+  if(localStorage.getItem('patientList'))
+  {
+    patients = (JSON.parse(localStorage.getItem("patientList"))).find((patient, index) => {
+      return patient.id == props.patient;
+    })
+  }
+  if(localStorage.getItem('doctors'))
+  {
+    doctors = (JSON.parse(localStorage.getItem("doctors"))).find((doctor, index) => {
+      return doctor.id == props.doctor;
+    })
+  }
 
   async function handleAcceptAppointment(event) {
     event.preventDefault();
@@ -26,9 +34,23 @@ const AppointmentCard = (props) => {
       console.log(err)
     }) 
   }
-  async function handleDeleteAppointment(event) {
+
+  async function handleRejectAppointment(event) {
     event.preventDefault();
-    CustomAxios.delete(`appointments/${props.id}/`, {})
+    CustomAxios.put(`appointments/${props.id}/`, {
+      id: props.id,
+      doctor_id: props.doctor,
+      patient_id: props.patient,
+      description: props.description,
+      status: 3,
+      date: props.date
+    }).then((response) => {
+      console.log("appointment edited =", response);
+      window.location.reload(true)
+    })
+    .catch((err) => {
+      console.log(err);
+    })
     
   }
 
@@ -37,7 +59,7 @@ const AppointmentCard = (props) => {
       <div className="appointment-title">Appointment with</div>
       <div className="appointment-title">
         {
-          props.byPatient ? (props.doctor.first_name) : (patients.first_name + " " + patients.last_name)
+          props.byPatient ? ("Dr. " + doctors.first_name + " " + doctors.last_name) : (patients.first_name + " " + patients.last_name)
         } </div>
       <div className="appointment-description">{props.description}</div>
       <div className="appointment-show-date">{props.date}</div>
@@ -48,16 +70,14 @@ const AppointmentCard = (props) => {
       }
       {
         props.pendingByDoctor ? 
-        <button className="appointment-button button" onClick={handleAcceptAppointment}>Delete</button> : <div></div> 
+        <button className="appointment-button button" onClick={handleRejectAppointment}>Delete</button> : <div></div> 
       }
       </div>
-      {
-        <div className="appointment-status">
-          {
-            props.status == 1 ? 'ACCEPTED' : 'PENDING'
-          }
-        </div> 
-      }
+      <div className="appointment-status">
+        {
+          (props.status == 1) ? 'ACCEPTED' : (props.status == 2 ? 'PENDING' : 'DECLINED')
+        }
+      </div> 
     </div>
   )
 }
