@@ -1,4 +1,5 @@
 .appointment-card {
+    height: fit-content;
     margin: 2rem;
     width: 70%;
     background: linear-gradient(to top, #191d23, #232a34);
@@ -35,6 +36,8 @@
         }
         .appointment-status {
             font-size: 1.5rem;
+            padding: 2rem;
+            background-color: #e6e6e6;
         }
     }
 }
