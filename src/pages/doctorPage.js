@@ -53,6 +53,7 @@ const PendingAppointments = (props) => {
           description={appointment.description}
           byPatient={false}
           pendingByDoctor={true}
+          pendingassignment={true}
         />
       )
     })

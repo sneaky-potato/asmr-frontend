@@ -78,7 +78,7 @@ const AppointmentCard = (props) => {
       </div>
       <div className="appointment-status">
         {
-          (props.status == 1) ? <div className="green">ACCEPTED</div> : (props.status == 2 ? <div className="yellow">PENDING</div> : <div className="red">DECLINED</div>)
+          !props.pendingByDoctor ? ((props.status == 1) ? <div className="green">ACCEPTED</div> : (props.status == 2 ? <div className="yellow">PENDING</div> : <div className="red">DECLINED</div>)) : <></>
         }
       </div> 
     </div>
