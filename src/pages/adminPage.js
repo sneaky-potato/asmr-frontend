@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import Navigation from "../components/navbar";
 import CustomAxios from '../utils/customAxios';
 import DoctorCard from "../components/doctorCard";
+import { BACKEND_URL } from '../constants';
+import axios from "axios";
+import { Notyf } from "notyf";
 
 const isPendingDoctor = (doctor) => {
   return (doctor.pending == 1);
@@ -90,10 +93,68 @@ const ListOfDoctors = (props) => {
 }
 
 const ListOfHospitals = (props) => {
+
+  const notyf = new Notyf();
+
+  const [hospitalName, setHospitalName] = useState("");
+  const [hospitalAddress, setHospitalAddress] = useState("");
+  const [hospitalPin, setHospitalPin] = useState(""); 
+
+  async function OnAddHospital(event) {
+    event.preventDefault();
+    CustomAxios.post(`hospitals`, {
+        name: hospitalName,
+        address: hospitalAddress,
+        pincode: hospitalPin
+    }).then(
+        result => {
+          console.log(result.data)
+          console.log("hospital created successfully")
+          notyf.success("Hospital added to database")
+        }
+).catch (error => {
+    console.log(error);
+    notyf.error("Some error occurred")
+})
+}
+  function validateForm() {
+    return hospitalName.length > 0 && hospitalPin.length > 0;
+  }
   return(
-    <div className="hospital-list">
-      hospital
-    </div>
+    <div className="hospital-form">
+            <form onSubmit={OnAddHospital} className="login-form">
+        <div className="form-group">
+          {/* <label className="form-label">Na</label> */}
+          <input
+            placeholder="Hospital Name"
+            autoFocus
+            type="text"
+            value={hospitalName}
+            onChange={(e) => setHospitalName(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <input
+            placeholder="Hospital Address"
+            type="text"
+            value={hospitalAddress}
+            onChange={(e) => setHospitalAddress(e.target.value)}
+          />
+        </div>
+
+        <div className="form-group">
+          <input
+            placeholder="Hospital Pin code"
+            type="text"
+            value={hospitalPin}
+            onChange={(e) => setHospitalPin(e.target.value)}
+          />
+        </div>
+        <button type="submit" className="form-button" disabled={!validateForm()}>
+          Register
+        </button>
+      </form>
+            </div>
   )
 }
 
@@ -117,6 +178,7 @@ const AdminPage = () => {
   ]
 
   const [currentSelection, setCurrentSelection] = useState(0);
+  const [hospitalList, setHospitalList] = useState([]);
   const [userList, setUserList] = useState([]);
   const [filterList, setFilterList] = useState([]);
 
@@ -141,6 +203,12 @@ const AdminPage = () => {
         .then((response) => {
             setUserList(response.data.doctors)
             setUserDetail(JSON.parse(localStorage.getItem("userDetail")))
+            CustomAxios.get('hospitals')
+            .then((response) => {
+              setHospitalList(response.data.hospitals)
+              console.log(response.data.hospitals)
+              localStorage.setItem('hospitalList', JSON.stringify(response.data.hospitals))
+            })
           })
           .catch((err) => console.log(err));
     }, []);
